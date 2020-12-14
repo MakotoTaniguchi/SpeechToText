@@ -38,6 +38,7 @@ $(function () {
         $('#rec_type').text("録音中断");
         recognition.start();
     };
+    var intervalNumber = 0;
     $('#rec_type').on("click", function () {
         if ($('#rec_type').data('type') == "start") {
             if ($('#user_name').val() == '') {
@@ -47,11 +48,15 @@ $(function () {
             $('#rec_type').data('type', 'abort');
             $('#rec_type').text("録音中断");
             recognition.start();
+            intervalNumber = setInterval(function () {
+                getHistory(index);
+            }, 1000);
         }
         else {
             $('#rec_type').data('type', 'start');
             $('#rec_type').text("録音開始");
             recognition.abort();
+            clearInterval(intervalNumber);
         }
     });
     navigator.mediaDevices.enumerateDevices()
@@ -97,9 +102,6 @@ $(function () {
             }
         });
     }
-    setInterval(function () {
-        getHistory(index);
-    }, 1000);
 });
 var SpeechJson = (function () {
     function SpeechJson() {
