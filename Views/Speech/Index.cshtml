@@ -15,15 +15,13 @@
   <textarea id="text_lines" name="area" class="boder_solid" style="width: 50em;height: 50em;"></textarea>
 
   <div>
+    <label id="input_devices"></label>
+  </div>
+  <div>
     <form action="~/speech/send" method="POST">
       <label>名前：</label><input id="user_name" type="text" name="user_name" />
       <input id='send_text' type="hidden" name="send_text" />
     </form>
-
-    <select id="input_devices">
-      <option>音声メニュー</option>
-    </select>
-
     <button id="rec_type" data-type="start">録音開始</button>
   </div>
 </div>

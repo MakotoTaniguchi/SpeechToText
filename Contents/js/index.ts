@@ -77,26 +77,27 @@ $(() => {
     }
   });
 
-  navigator.mediaDevices.enumerateDevices()
-    .then((devices: MediaDeviceInfo[]) => { // 成功時
-      var inputDevices = devices.filter((device: MediaDeviceInfo) => {
-        return device instanceof InputDeviceInfo;
-      });
+  let $inputDevice = $("#input_devices");
+  if (navigator.mediaDevices != undefined) {
+    navigator.mediaDevices.enumerateDevices()
+      .then((devices: MediaDeviceInfo[]) => { // 成功時
+        var inputDevices = devices.filter((device: MediaDeviceInfo) => {
+          return device instanceof InputDeviceInfo;
+        });
 
-      let $inputDevice = $("#input_devices");
-      inputDevices.forEach((device: MediaDeviceInfo, index: number) => {
-        let option = '<option value="' + device.deviceId + '">' + device.label + '</option>';
-        $inputDevice.append(option);
-      });
-    });
+        inputDevices.forEach((device: MediaDeviceInfo, index: number) => {
 
-  $("#input_devices").on("change", () => {
-    let optionValue: string = $('#input_devices > option:selected').val() as string;
-    navigator.mediaDevices.getUserMedia({
-      audio: { deviceId: optionValue },
-      video: false
-    })
-  });
+          if (device.label.match(/既定.*/) != null) {
+            $inputDevice.text(device.label);
+          }
+        });
+      }).catch((reason => {
+        $inputDevice.text('なし');
+      }));
+  }
+  else {
+    $inputDevice.text('なし');
+  }
 
   let index: number = 0
   function getHistory(countIndex: number) {

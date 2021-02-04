@@ -59,24 +59,25 @@ $(function () {
             clearInterval(intervalNumber);
         }
     });
-    navigator.mediaDevices.enumerateDevices()
-        .then(function (devices) {
-        var inputDevices = devices.filter(function (device) {
-            return device instanceof InputDeviceInfo;
-        });
-        var $inputDevice = $("#input_devices");
-        inputDevices.forEach(function (device, index) {
-            var option = '<option value="' + device.deviceId + '">' + device.label + '</option>';
-            $inputDevice.append(option);
-        });
-    });
-    $("#input_devices").on("change", function () {
-        var optionValue = $('#input_devices > option:selected').val();
-        navigator.mediaDevices.getUserMedia({
-            audio: { deviceId: optionValue },
-            video: false
-        });
-    });
+    var $inputDevice = $("#input_devices");
+    if (navigator.mediaDevices != undefined) {
+        navigator.mediaDevices.enumerateDevices()
+            .then(function (devices) {
+            var inputDevices = devices.filter(function (device) {
+                return device instanceof InputDeviceInfo;
+            });
+            inputDevices.forEach(function (device, index) {
+                if (device.label.match(/既定.*/) != null) {
+                    $inputDevice.text(device.label);
+                }
+            });
+        }).catch((function (reason) {
+            $inputDevice.text('なし');
+        }));
+    }
+    else {
+        $inputDevice.text('なし');
+    }
     var index = 0;
     function getHistory(countIndex) {
         $.ajax({
