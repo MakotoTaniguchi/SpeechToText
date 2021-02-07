@@ -19,8 +19,8 @@ $(() => {
     }
 
     let userName = $('#user_name').val();
-    let lines = $('#text_lines').val();
-    let inputLine = userName + '：' + transcript + '\n';
+    var now = new Date();
+    let inputLine = now.toLocaleDateString() + " " + now.toLocaleTimeString() + " " + userName + '：' + transcript + '\n';
 
     if (userName == "") {
       return;
@@ -64,10 +64,12 @@ $(() => {
 
       $('#rec_type').data('type', 'abort');
       $('#rec_type').text("録音中断");
-      recognition.start();
+
       intervalNumber = setInterval(() => {
         getHistory(index);
       }, 1000);
+
+      recognition.start();
     }
     else {
       $('#rec_type').data('type', 'start');

@@ -16,8 +16,8 @@ $(function () {
             }
         }
         var userName = $('#user_name').val();
-        var lines = $('#text_lines').val();
-        var inputLine = userName + '：' + transcript + '\n';
+        var now = new Date();
+        var inputLine = now.toLocaleDateString() + " " + now.toLocaleTimeString() + " " + userName + '：' + transcript + '\n';
         if (userName == "") {
             return;
         }
@@ -47,10 +47,10 @@ $(function () {
             }
             $('#rec_type').data('type', 'abort');
             $('#rec_type').text("録音中断");
-            recognition.start();
             intervalNumber = setInterval(function () {
                 getHistory(index);
             }, 1000);
+            recognition.start();
         }
         else {
             $('#rec_type').data('type', 'start');
